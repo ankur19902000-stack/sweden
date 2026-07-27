@@ -1,7 +1,7 @@
 {
   "name": "sweden-jobs-portal",
   "version": "1.0.0",
-  "description": "JOBBBAST.se — 100,000 Jobb i Sverige | Sveriges största jobbportal",
+  "description": "SWEDENJOBS.se — 100,000 Jobs in Sweden | Sweden's Largest Job Portal",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
