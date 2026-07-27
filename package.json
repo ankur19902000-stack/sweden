@@ -1,7 +1,7 @@
 {
-  "name": "dubai-jobs-portal",
+  "name": "sweden-jobs-portal",
   "version": "1.0.0",
-  "description": "Dubai Jobs Portal - 100,000 Job Listings | UAE",
+  "description": "JOBBBAST.se — 100,000 Jobb i Sverige | Sveriges största jobbportal",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
