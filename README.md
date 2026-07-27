@@ -1,25 +1,25 @@
-# 🇦🇪 DubaiJobs.ae — 100,000 Job Portal
+# 🇸🇪 JOBBBAST.se — 100,000 Jobb Portal | Sverige
 
 ## Features
-- ✅ 100,000 unique job pages (`/jobs/1` → `/jobs/100000`)
-- ✅ JSON-LD JobPosting schema on every job page
-- ✅ 50% Remote jobs, 50% On-site jobs across all 7 Emirates
-- ✅ XML Sitemaps (100 sitemap files)
+- ✅ 100,000 unika jobbsidor (`/jobb/1` → `/jobb/100000`)
+- ✅ JSON-LD JobPosting-schema på varje jobbsida
+- ✅ 50% Distansjobb, 50% På-plats-jobb över hela Sverige
+- ✅ XML Sitemaps (100 sitemap-filer)
 - ✅ robots.txt
-- ✅ Pagination (20 jobs/page)
-- ✅ Apply Now button
+- ✅ Paginering (20 jobb/sida)
+- ✅ Ansök nu-knapp
 - ✅ REST API
-- ✅ Zero database — all data generated deterministically
-- ✅ Gzip compression — fast on Railway free tier
+- ✅ Ingen databas — all data genereras deterministiskt
+- ✅ Gzip-komprimering — snabbt på Railway free tier
 
-## Deploy to Railway
-1. Push to GitHub or upload zip
-2. Go to [railway.app](https://railway.app)
-3. Click **New Project** → **Deploy from GitHub repo** or **Deploy from zip**
-4. Railway auto-detects Node.js and deploys!
+## Deploy till Railway
+1. Pusha till GitHub eller ladda upp zip
+2. Gå till [railway.app](https://railway.app)
+3. Klicka **New Project** → **Deploy from GitHub repo** eller **Deploy from zip**
+4. Railway auto-detekterar Node.js och distribuerar!
 
-## Local Development
+## Lokal utveckling
 ```bash
 npm install
 npm start
-# Open http://localhost:3000
+# Öppna http://localhost:3000
