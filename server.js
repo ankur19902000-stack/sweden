@@ -9,6 +9,9 @@ app.use(compression());
 app.use(express.static(__dirname));
 app.use(express.static('public'));
 
+// ─── DOMAIN CONFIGURATION ──────────────────────────────────────────────────────
+const DOMAIN = 'https://rightwingsweden.up.railway.app';
+
 // ─── AD CONFIGURATION ──────────────────────────────────────────────────────────
 const AD_SCRIPT = `
 <script>
@@ -46,15 +49,17 @@ const JOBS_PER_PAGE = 20;
 
 function renderHTML({ title, meta, bodyContent, schema }) {
   return `<!DOCTYPE html>
-<html lang="sv">
+<html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-//meta
+<meta name="google-site-verification" content="f_swjSKQxA8Dye1qCFyBXzBnhlnmJ2vPjFOPiLsvIvo" />
 <title>${title}</title>
 <meta name="description" content="${meta}"/>
 <meta property="og:title" content="${title}"/>
 <meta property="og:description" content="${meta}"/>
+<meta property="og:url" content="${DOMAIN}"/>
+<link rel="canonical" href="${DOMAIN}"/>
 <meta name="robots" content="index, follow"/>
 ${schema ? `<script type="application/ld+json">${JSON.stringify(schema, null, 2)}</script>` : ''}
 <style>
@@ -137,11 +142,11 @@ footer a{color:#ffd700}
 <body>
 ${AD_TOP}
 <nav>
-  <a class="brand" href="/"><span>JOB</span>BAST<span>.se</span></a>
+  <a class="brand" href="/"><span>SWEDEN</span>JOBS<span>.se</span></a>
   <div class="nav-links">
-    <a href="/">Hem</a>
-    <a href="/jobb">Alla Jobb</a>
-    <a href="/jobb?type=remote">Distansjobb</a>
+    <a href="/">Home</a>
+    <a href="/jobs">All Jobs</a>
+    <a href="/jobs?type=remote">Remote Jobs</a>
     <a href="/sitemap">Sitemap</a>
   </div>
 </nav>
@@ -162,25 +167,25 @@ ${AD_TOP}
 ${bodyContent}
 ${AD_BOTTOM}
 <footer>
-  &copy; 2025 JOBBBAST.se — <strong>100 000 Jobb</strong> i Sverige |
-  <a href="/jobb">Alla Jobb</a> · <a href="/jobb?type=remote">Distansjobb</a> · <a href="/sitemap">Sitemap</a>
+  &copy; 2025 SWEDENJOBS.se — <strong>100,000 Jobs</strong> in Sweden |
+  <a href="/jobs">All Jobs</a> · <a href="/jobs?type=remote">Remote Jobs</a> · <a href="/sitemap">Sitemap</a>
 </footer>
 <script>
 function openApply(title){
-  window.location.href='https://rightwing-production.up.railway.app/apply-now.html';
+  window.location.href='${DOMAIN}/apply-now.html';
 }
 </script>
 </body>
 </html>`;
 }
 
-// ── HOME PAGE ─────────────────────────────────────────────────────────────────
+// ─── HOME PAGE ─────────────────────────────────────────────────────────────────
 app.get('/', (req, res) => {
   const featuredIds = [1, 50001, 2, 50002, 3, 50003, 10000, 60000];
   const featuredJobs = featuredIds.map(id => getJobData(id));
 
   const cards = featuredJobs.map(job => `
-<a href="/jobb/${job.id}" style="display:block">
+<a href="/jobs/${job.id}" style="display:block">
 <div class="job-card">
   <div class="card-header">
     <div>
@@ -188,7 +193,7 @@ app.get('/', (req, res) => {
       <div class="card-company">${job.company}</div>
     </div>
     <div class="card-badges">
-      <span class="badge ${job.isRemote ? 'badge-remote' : 'badge-office'}">${job.isRemote ? '🌐 Distans' : '🏢 På plats'}</span>
+      <span class="badge ${job.isRemote ? 'badge-remote' : 'badge-office'}">${job.isRemote ? '🌐 Remote' : '🏢 On-site'}</span>
       <span class="badge badge-type">${job.jobTypeDisplay}</span>
     </div>
   </div>
@@ -200,7 +205,7 @@ app.get('/', (req, res) => {
   <div class="card-desc">${job.description.substring(0, 180)}...</div>
   <div class="card-footer">
     <span class="card-salary">${job.salary}</span>
-    <button class="btn-apply" onclick="event.preventDefault();openApply('${job.title.replace(/'/g, "\\'")} at ${job.company.replace(/'/g, "\\'")}')">Ansök nu</button>
+    <button class="btn-apply" onclick="event.preventDefault();openApply('${job.title.replace(/'/g, "\\'")} at ${job.company.replace(/'/g, "\\'")}')">Apply Now</button>
   </div>
 </div>
 </a>`).join('');
@@ -208,63 +213,62 @@ app.get('/', (req, res) => {
   const websiteSchema = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "JOBBBAST.se",
-    "url": "https://rightwing-production.up.railway.app",
-    "description": "Sveriges största jobbportal med 100 000 jobbannonser — distans och på plats i hela Sverige",
+    "name": "SWEDENJOBS.se",
+    "url": DOMAIN,
+    "description": "Sweden's largest job portal with 100,000 job listings — remote and on-site across all 21 counties",
     "potentialAction": {
       "@type": "SearchAction",
-      "target": "https://rightwing-production.up.railway.app/jobb?q={search_term_string}",
+      "target": `${DOMAIN}/jobs?q={search_term_string}`,
       "query-input": "required name=search_term_string"
     }
   };
 
   const body = `
 <div class="hero">
-  <h1>Hitta ditt drömjobb i <span class="accent">Sverige</span></h1>
-  <p>100 000 verifierade jobb — distans & på plats — över hela Sverige</p>
-  <form action="/jobb" method="get" style="display:flex;gap:.75rem;max-width:580px;margin:0 auto;flex-wrap:wrap">
-    <input name="q" type="text" placeholder="Jobbtitel, bransch eller företag..." style="flex:2;min-width:200px;padding:.7rem 1rem;border-radius:8px;border:none;font-size:.95rem"/>
+  <h1>Find Your Dream Job in <span class="accent">Sweden</span></h1>
+  <p>100,000 verified job listings — remote & on-site — across all 21 counties</p>
+  <form action="/jobs" method="get" style="display:flex;gap:.75rem;max-width:580px;margin:0 auto;flex-wrap:wrap">
+    <input name="q" type="text" placeholder="Job title, skill, or company..." style="flex:2;min-width:200px;padding:.7rem 1rem;border-radius:8px;border:none;font-size:.95rem"/>
     <select name="location" style="flex:1;min-width:140px;padding:.7rem;border-radius:8px;border:none;font-size:.85rem">
-      <option value="">Alla län</option>
-      <option value="remote">Distans endast</option>
-      <option value="stockholm">Stockholms län</option>
-      <option value="vastra-gotaland">Västra Götalands län</option>
-      <option value="skane">Skåne län</option>
-      <option value="uppsala">Uppsala län</option>
+      <option value="">All Counties</option>
+      <option value="remote">Remote Only</option>
+      <option value="stockholm">Stockholm County</option>
+      <option value="vastra-gotaland">Västra Götaland County</option>
+      <option value="skane">Skåne County</option>
     </select>
-    <button type="submit" style="padding:.7rem 1.5rem;background:#ffd700;color:#1a1a2e;border:none;border-radius:8px;font-weight:700;cursor:pointer">Sök →</button>
+    <button type="submit" style="padding:.7rem 1.5rem;background:#ffd700;color:#1a1a2e;border:none;border-radius:8px;font-weight:700;cursor:pointer">Search →</button>
   </form>
   <div class="stat-bar">
-    <div class="stat"><strong>100 000</strong><span>Jobb totalt</span></div>
-    <div class="stat"><strong>50 000</strong><span>Distansjobb</span></div>
-    <div class="stat"><strong>50 000</strong><span>På plats</span></div>
-    <div class="stat"><strong>21</strong><span>Län</span></div>
-    <div class="stat"><strong>200+</strong><span>Företag</span></div>
+    <div class="stat"><strong>100,000</strong><span>Total Jobs</span></div>
+    <div class="stat"><strong>50,000</strong><span>Remote Jobs</span></div>
+    <div class="stat"><strong>50,000</strong><span>On-site Jobs</span></div>
+    <div class="stat"><strong>21</strong><span>Counties</span></div>
+    <div class="stat"><strong>200+</strong><span>Companies</span></div>
   </div>
 </div>
 
 <div class="container">
   <div class="info-box">
-    🇸🇪 Sveriges mest omfattande jobbportal — <strong>50 000 distansjobb</strong> och <strong>50 000 på-plats-jobb</strong> inom alla branscher.
+    🇸🇪 Sweden's most comprehensive job board — browse <strong>50,000 remote jobs</strong> and <strong>50,000 on-site jobs</strong> across all industries.
   </div>
    ${AD_MIDDLE}
-  <h2 style="margin-bottom:1rem;font-size:1.2rem">Utvalda jobb</h2>
+  <h2 style="margin-bottom:1rem;font-size:1.2rem">Featured Jobs</h2>
   <div class="page-grid">${cards}</div>
   <div style="text-align:center;margin-top:2rem">
-    <a href="/jobb" style="display:inline-block;padding:.85rem 2.5rem;background:#1a1a2e;color:#fff;border-radius:10px;font-weight:700">Se alla 100 000 jobb →</a>
+    <a href="/jobs" style="display:inline-block;padding:.85rem 2.5rem;background:#1a1a2e;color:#fff;border-radius:10px;font-weight:700">Browse All 100,000 Jobs →</a>
   </div>
 </div>`;
 
   res.send(renderHTML({
-    title: 'JOBBBAST.se — 100 000 Jobb i Sverige | Distans & På Plats',
-    meta: 'Hitta ditt nästa jobb i Sverige. 100 000 verifierade annonser — 50 000 distansjobb och 50 000 på-plats-jobb över hela landet.',
+    title: 'SWEDENJOBS.se — 100,000 Jobs in Sweden | Remote & On-site',
+    meta: 'Find your next job in Sweden. 100,000 verified listings — 50,000 remote and 50,000 on-site jobs across all 21 counties.',
     bodyContent: body,
     schema: websiteSchema
   }));
 });
 
-// ── JOB LISTING PAGE ──────────────────────────────────────────────────────────
-app.get('/jobb', (req, res) => {
+// ─── JOB LISTING PAGE ──────────────────────────────────────────────────────────
+app.get('/jobs', (req, res) => {
   const page = Math.max(1, parseInt(req.query.page) || 1);
   const typeFilter = req.query.type || 'all';
   const locationFilter = req.query.location || '';
@@ -286,7 +290,7 @@ app.get('/jobb', (req, res) => {
   const totalPages = Math.ceil(TOTAL_JOBS / JOBS_PER_PAGE);
 
   const cards = jobs.map(job => `
-<a href="/jobb/${job.id}" style="display:block">
+<a href="/jobs/${job.id}" style="display:block">
 <div class="job-card">
   <div class="card-header">
     <div>
@@ -294,7 +298,7 @@ app.get('/jobb', (req, res) => {
       <div class="card-company">${job.company}</div>
     </div>
     <div class="card-badges">
-      <span class="badge ${job.isRemote ? 'badge-remote' : 'badge-office'}">${job.isRemote ? '🌐 Distans' : '🏢 På plats'}</span>
+      <span class="badge ${job.isRemote ? 'badge-remote' : 'badge-office'}">${job.isRemote ? '🌐 Remote' : '🏢 On-site'}</span>
       <span class="badge badge-type">${job.jobTypeDisplay}</span>
       <span class="badge badge-exp">${job.experience}</span>
     </div>
@@ -307,33 +311,33 @@ app.get('/jobb', (req, res) => {
   <div class="card-desc">${job.description.substring(0, 200)}...</div>
   <div class="card-footer">
     <span class="card-salary">${job.salary}</span>
-    <button class="btn-apply" onclick="event.preventDefault();openApply('${job.title.replace(/'/g, "\\'")} at ${job.company.replace(/'/g, "\\'")}')">Ansök nu</button>
+    <button class="btn-apply" onclick="event.preventDefault();openApply('${job.title.replace(/'/g, "\\'")} at ${job.company.replace(/'/g, "\\'")}')">Apply Now</button>
   </div>
 </div>
 </a>`).join('');
 
   const pages = [];
-  if (page > 1) pages.push(`<a href="/jobb?page=${page - 1}&type=${typeFilter}">← Föregående</a>`);
+  if (page > 1) pages.push(`<a href="/jobs?page=${page - 1}&type=${typeFilter}">← Prev</a>`);
   const start = Math.max(1, page - 2);
   const end = Math.min(totalPages, page + 2);
-  if (start > 1) pages.push(`<a href="/jobb?page=1&type=${typeFilter}">1</a><span>…</span>`);
+  if (start > 1) pages.push(`<a href="/jobs?page=1&type=${typeFilter}">1</a><span>…</span>`);
   for (let p = start; p <= end; p++) {
     pages.push(p === page
       ? `<span class="current">${p}</span>`
-      : `<a href="/jobb?page=${p}&type=${typeFilter}">${p}</a>`);
+      : `<a href="/jobs?page=${p}&type=${typeFilter}">${p}</a>`);
   }
-  if (end < totalPages) pages.push(`<span>…</span><a href="/jobb?page=${totalPages}&type=${typeFilter}">${totalPages.toLocaleString()}</a>`);
-  if (page < totalPages) pages.push(`<a href="/jobb?page=${page + 1}&type=${typeFilter}">Nästa →</a>`);
+  if (end < totalPages) pages.push(`<span>…</span><a href="/jobs?page=${totalPages}&type=${typeFilter}">${totalPages.toLocaleString()}</a>`);
+  if (page < totalPages) pages.push(`<a href="/jobs?page=${page + 1}&type=${typeFilter}">Next →</a>`);
 
   const body = `
 <div class="hero" style="padding:1.75rem 1.5rem">
-  <h1 style="font-size:1.8rem">Bläddra bland <span class="accent">100 000 Jobb</span> i Sverige</h1>
-  <p>Sida ${page.toLocaleString()} av ${totalPages.toLocaleString()}</p>
+  <h1 style="font-size:1.8rem">Browse <span class="accent">100,000 Jobs</span> in Sweden</h1>
+  <p>Page ${page.toLocaleString()} of ${totalPages.toLocaleString()}</p>
 </div>
 <div class="filter-row">
-  <a href="/jobb"><span class="filter-chip ${typeFilter==='all'?'active':''}">Alla jobb (100 000)</span></a>
-  <a href="/jobb?type=remote"><span class="filter-chip ${typeFilter==='remote'?'active':''}">🌐 Distans (50 000)</span></a>
-  <a href="/jobb?type=onsite"><span class="filter-chip ${typeFilter==='onsite'?'active':''}">🏢 På plats (50 000)</span></a>
+  <a href="/jobs"><span class="filter-chip ${typeFilter==='all'?'active':''}">All Jobs (100,000)</span></a>
+  <a href="/jobs?type=remote"><span class="filter-chip ${typeFilter==='remote'?'active':''}">🌐 Remote (50,000)</span></a>
+  <a href="/jobs?type=onsite"><span class="filter-chip ${typeFilter==='onsite'?'active':''}">🏢 On-site (50,000)</span></a>
 </div>
 <div class="container">
   <div class="page-grid">${cards}</div>
@@ -341,21 +345,21 @@ app.get('/jobb', (req, res) => {
 </div>`;
 
   res.send(renderHTML({
-    title: `Jobb i Sverige — Sida ${page} av ${totalPages.toLocaleString()} | JOBBBAST.se`,
-    meta: `Bläddra bland ${TOTAL_JOBS.toLocaleString()} jobb i Sverige. Sida ${page}. Distans och på-plats-positioner inom alla branscher.`,
+    title: `Sweden Jobs — Page ${page} of ${totalPages.toLocaleString()} | SWEDENJOBS.se`,
+    meta: `Browse ${TOTAL_JOBS.toLocaleString()} jobs in Sweden. Page ${page}. Remote and on-site positions across all industries.`,
     bodyContent: body,
     schema: null
   }));
 });
 
-// ── INDIVIDUAL JOB PAGE ───────────────────────────────────────────────────────
-app.get('/jobb/:id', (req, res) => {
+// ─── INDIVIDUAL JOB PAGE ───────────────────────────────────────────────────────
+app.get('/jobs/:id', (req, res) => {
   const id = parseInt(req.params.id);
   if (!id || id < 1 || id > TOTAL_JOBS) {
     return res.status(404).send(renderHTML({
-      title: 'Jobb ej hittat | JOBBBAST.se',
-      meta: 'Denna jobbannons kunde inte hittas.',
-      bodyContent: `<div class="container" style="text-align:center;padding:4rem 1.5rem"><h1>404 — Jobb ej hittat</h1><p style="margin:1rem 0 2rem">Detta jobb kan ha blivit tillsatt eller borttaget.</p><a href="/jobb" style="color:#1a6b8a">← Bläddra bland alla jobb</a></div>`,
+      title: 'Job Not Found | SWEDENJOBS.se',
+      meta: 'This job listing was not found.',
+      bodyContent: `<div class="container" style="text-align:center;padding:4rem 1.5rem"><h1>404 — Job Not Found</h1><p style="margin:1rem 0 2rem">This job may have been filled or removed.</p><a href="/jobs" style="color:#1a6b8a">← Browse All Jobs</a></div>`,
       schema: null
     }));
   }
@@ -370,12 +374,12 @@ app.get('/jobb/:id', (req, res) => {
   const relatedJobs = relatedIds.slice(0, 3).map(rid => getJobData(rid));
 
   const relatedCards = relatedJobs.map(rj => `
-<a href="/jobb/${rj.id}" style="display:block">
+<a href="/jobs/${rj.id}" style="display:block">
 <div class="job-card" style="padding:1rem">
   <div class="card-title" style="font-size:.95rem">${rj.title}</div>
   <div class="card-company">${rj.company}</div>
   <div style="margin-top:.5rem;display:flex;gap:.5rem;flex-wrap:wrap">
-    <span class="badge ${rj.isRemote ? 'badge-remote' : 'badge-office'}" style="font-size:.7rem">${rj.isRemote ? '🌐 Distans' : '🏢 På plats'}</span>
+    <span class="badge ${rj.isRemote ? 'badge-remote' : 'badge-office'}" style="font-size:.7rem">${rj.isRemote ? '🌐 Remote' : '🏢 On-site'}</span>
     <span class="badge badge-type" style="font-size:.7rem">${rj.jobTypeDisplay}</span>
   </div>
 </div>
@@ -384,7 +388,7 @@ app.get('/jobb/:id', (req, res) => {
   const body = `
 <div class="container">
   <div class="breadcrumb">
-    <a href="/">Hem</a> › <a href="/jobb">Jobb</a> › <a href="/jobb?type=${job.isRemote ? 'remote' : 'onsite'}">${job.isRemote ? 'Distans' : 'På plats'}</a> › ${job.title}
+    <a href="/">Home</a> › <a href="/jobs">Jobs</a> › <a href="/jobs?type=${job.isRemote ? 'remote' : 'onsite'}">${job.isRemote ? 'Remote' : 'On-site'}</a> › ${job.title}
   </div>
   <div class="job-detail">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem">
@@ -393,8 +397,8 @@ app.get('/jobb/:id', (req, res) => {
         <p style="font-size:1.05rem;color:#555;margin-top:.35rem">${job.company} · ${job.industry}</p>
       </div>
       <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.5rem">
-        <span class="badge ${job.isRemote ? 'badge-remote' : 'badge-office'}" style="font-size:.85rem;padding:.4rem 1rem">${job.isRemote ? '🌐 Distans' : '🏢 På plats'}</span>
-        <span style="font-size:.8rem;color:#888">Jobb-ID: SE-${String(job.id).padStart(6, '0')}</span>
+        <span class="badge ${job.isRemote ? 'badge-remote' : 'badge-office'}" style="font-size:.85rem;padding:.4rem 1rem">${job.isRemote ? '🌐 Remote' : '🏢 On-site'}</span>
+        <span style="font-size:.8rem;color:#888">Job ID: SE-${String(job.id).padStart(6, '0')}</span>
       </div>
     </div>
     <div class="detail-meta">
@@ -403,42 +407,42 @@ app.get('/jobb/:id', (req, res) => {
       <span class="detail-chip">💼 ${job.jobTypeDisplay}</span>
       <span class="detail-chip">📊 ${job.experience}</span>
       <span class="detail-chip">🏭 ${job.industry}</span>
-      <span class="detail-chip">📅 Publicerad: ${job.postedDate}</span>
+      <span class="detail-chip">📅 Posted: ${job.postedDate}</span>
     </div>
     <div class="detail-body">${job.description}</div>
     <div class="apply-section">
-      <h3>Redo att ansöka?</h3>
-      <p>Skicka in din ansökan för <strong>${job.title}</strong> hos <strong>${job.company}</strong> — tar mindre än 2 minuter</p>
+      <h3>Ready to Apply?</h3>
+      <p>Submit your application for <strong>${job.title}</strong> at <strong>${job.company}</strong> — takes less than 2 minutes</p>
       <button class="btn-apply-big" onclick="openApply('${job.title.replace(/'/g, "\\'")} at ${job.company.replace(/'/g, "\\'")}')">
-        Ansök nu →
+        Apply Now →
       </button>
     </div>
   </div>
 
   <div style="margin-top:2rem">
-    <h2 style="font-size:1.1rem;margin-bottom:1rem">Liknande jobb du kanske gillar</h2>
+    <h2 style="font-size:1.1rem;margin-bottom:1rem">Similar Jobs You Might Like</h2>
     <div class="page-grid">${relatedCards}</div>
   </div>
   <div style="text-align:center;margin-top:1.5rem">
-    <a href="/jobb" style="color:#1a6b8a;font-weight:600">← Bläddra bland alla 100 000 jobb</a>
+    <a href="/jobs" style="color:#1a6b8a;font-weight:600">← Browse All 100,000 Jobs</a>
   </div>
 </div>`;
 
   res.send(renderHTML({
-    title: `${job.title} hos ${job.company} — ${job.location} | JOBBBAST.se`,
-    meta: `${job.title} jobb hos ${job.company}. ${job.isRemote ? 'Distans' : job.location}. ${job.salary}. Ansök nu på JOBBBAST.se.`,
+    title: `${job.title} at ${job.company} — ${job.location} | SWEDENJOBS.se`,
+    meta: `${job.title} job at ${job.company}. ${job.isRemote ? 'Remote' : job.location}. ${job.salary}. Apply now on SWEDENJOBS.se.`,
     bodyContent: body,
     schema
   }));
 });
 
-// ── SITEMAP INDEX ─────────────────────────────────────────────────────────────
+// ─── SITEMAP INDEX ─────────────────────────────────────────────────────────────
 app.get('/sitemap.xml', (req, res) => {
   const totalSitemaps = 100;
   let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`;
   for (let i = 1; i <= totalSitemaps; i++) {
-    xml += `\n<sitemap><loc>https://rightwing-production.up.railway.app/sitemap-${i}.xml</loc></sitemap>`;
+    xml += `\n<sitemap><loc>${DOMAIN}/sitemap-${i}.xml</loc></sitemap>`;
   }
   xml += `\n</sitemapindex>`;
   res.type('application/xml').send(xml);
@@ -452,74 +456,79 @@ app.get('/sitemap-:num.xml', (req, res) => {
   let xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`;
   for (let i = start; i <= end; i++) {
-    xml += `\n<url><loc>https://rightwing-production.up.railway.app/jobb/${i}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>`;
+    xml += `\n<url><loc>${DOMAIN}/jobs/${i}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>`;
   }
   xml += `\n</urlset>`;
   res.type('application/xml').send(xml);
 });
 
-// ── SITEMAP HTML PAGE ─────────────────────────────────────────────────────────
+// ─── SITEMAP HTML PAGE ─────────────────────────────────────────────────────────
 app.get('/sitemap', (req, res) => {
   const body = `
 <div class="container">
-  <h1 style="margin-bottom:1rem">Sitemap — JOBBBAST.se</h1>
-  <div class="info-box">📌 100 000 individuella jobbsidor + XML-sitemaps för alla sökmotorer</div>
+  <h1 style="margin-bottom:1rem">Sitemap — SWEDENJOBS.se</h1>
+  <div class="info-box">📌 100,000 individual job pages + XML sitemaps for all search engines</div>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-top:1rem">
     <div class="job-card">
-      <div class="card-title">Huvudsidor</div>
+      <div class="card-title">Main Pages</div>
       <div style="display:flex;flex-direction:column;gap:.5rem;margin-top:.75rem;font-size:.88rem">
-        <a href="/" style="color:#1a6b8a">🏠 Hem</a>
-        <a href="/jobb" style="color:#1a6b8a">📋 Alla jobb (100 000)</a>
-        <a href="/jobb?type=remote" style="color:#1a6b8a">🌐 Distansjobb (50 000)</a>
-        <a href="/jobb?type=onsite" style="color:#1a6b8a">🏢 På-plats-jobb (50 000)</a>
+        <a href="/" style="color:#1a6b8a">🏠 Home</a>
+        <a href="/jobs" style="color:#1a6b8a">📋 All Jobs (100,000)</a>
+        <a href="/jobs?type=remote" style="color:#1a6b8a">🌐 Remote Jobs (50,000)</a>
+        <a href="/jobs?type=onsite" style="color:#1a6b8a">🏢 On-site Jobs (50,000)</a>
       </div>
     </div>
     <div class="job-card">
       <div class="card-title">XML Sitemaps</div>
       <div style="display:flex;flex-direction:column;gap:.5rem;margin-top:.75rem;font-size:.88rem">
         <a href="/sitemap.xml" style="color:#1a6b8a">📄 Sitemap Index</a>
-        <a href="/sitemap-1.xml" style="color:#1a6b8a">📄 Sitemap 1 (Jobb 1–1 000)</a>
-        <a href="/sitemap-2.xml" style="color:#1a6b8a">📄 Sitemap 2 (Jobb 1 001–2 000)</a>
-        <span style="color:#888">… 100 sitemap-filer totalt</span>
+        <a href="/sitemap-1.xml" style="color:#1a6b8a">📄 Sitemap 1 (Jobs 1–1,000)</a>
+        <a href="/sitemap-2.xml" style="color:#1a6b8a">📄 Sitemap 2 (Jobs 1,001–2,000)</a>
+        <span style="color:#888">… 100 sitemap files total</span>
       </div>
     </div>
     <div class="job-card">
-      <div class="card-title">Jobbsidor (intervall)</div>
+      <div class="card-title">Job Pages Range</div>
       <div style="display:flex;flex-direction:column;gap:.5rem;margin-top:.75rem;font-size:.88rem">
-        <a href="/jobb/1" style="color:#1a6b8a">Jobb #1 (Första distansjobbet)</a>
-        <a href="/jobb/50000" style="color:#1a6b8a">Jobb #50 000 (Sista distansjobbet)</a>
-        <a href="/jobb/50001" style="color:#1a6b8a">Jobb #50 001 (Första på-plats-jobbet)</a>
-        <a href="/jobb/100000" style="color:#1a6b8a">Jobb #100 000 (Sista på-plats-jobbet)</a>
+        <a href="/jobs/1" style="color:#1a6b8a">Job #1 (First Remote Job)</a>
+        <a href="/jobs/50000" style="color:#1a6b8a">Job #50,000 (Last Remote Job)</a>
+        <a href="/jobs/50001" style="color:#1a6b8a">Job #50,001 (First On-site Job)</a>
+        <a href="/jobs/100000" style="color:#1a6b8a">Job #100,000 (Last On-site Job)</a>
       </div>
     </div>
   </div>
 </div>`;
 
   res.send(renderHTML({
-    title: 'Sitemap | JOBBBAST.se',
-    meta: 'Komplett sitemap för JOBBBAST.se med 100 000 jobbannonser i Sverige.',
+    title: 'Sitemap | SWEDENJOBS.se',
+    meta: 'Complete sitemap of SWEDENJOBS.se with 100,000 job listings across Sweden.',
     bodyContent: body,
     schema: null
   }));
 });
 
-// ── ROBOTS.TXT ────────────────────────────────────────────────────────────────
+// ─── ROBOTS.TXT ────────────────────────────────────────────────────────────────
 app.get('/robots.txt', (req, res) => {
   res.type('text/plain').send(`User-agent: *
 Allow: /
-Sitemap: https://rightwing-production.up.railway.app/sitemap.xml
+Sitemap: ${DOMAIN}/sitemap.xml
 Disallow: /api/`);
 });
 
-// ── API ─────────────────────────────────────────────────────────────────────
-app.get('/api/jobb/:id', (req, res) => {
+// ─── APPLY PAGE REDIRECT ──────────────────────────────────────────────────────
+app.get('/apply-now.html', (req, res) => {
+  res.sendFile(__dirname + '/apply-now.html');
+});
+
+// ─── API ─────────────────────────────────────────────────────────────────────
+app.get('/api/jobs/:id', (req, res) => {
   const id = parseInt(req.params.id);
-  if (!id || id < 1 || id > TOTAL_JOBS) return res.status(404).json({ error: 'Jobb ej hittat' });
+  if (!id || id < 1 || id > TOTAL_JOBS) return res.status(404).json({ error: 'Job not found' });
   const job = getJobData(id);
   res.json({ job, schema: getJobSchema(job) });
 });
 
-app.get('/api/jobb', (req, res) => {
+app.get('/api/jobs', (req, res) => {
   const page = Math.max(1, parseInt(req.query.page) || 1);
   const limit = Math.min(50, parseInt(req.query.limit) || 20);
   const start = (page - 1) * limit + 1;
@@ -531,8 +540,8 @@ app.get('/api/jobb', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`🇸🇪 JOBBBAST.se körs på port ${PORT}`);
-  console.log(`📋 ${TOTAL_JOBS.toLocaleString()} jobbsidor redo`);
-  console.log(`🏢 ${companies.length} företag anställer i Sverige`);
-  console.log(`📍 ${swedishLocations.length} platser över hela Sverige`);
+  console.log(`🇸🇪 SWEDENJOBS.se running on ${DOMAIN}`);
+  console.log(`📋 ${TOTAL_JOBS.toLocaleString()} job pages ready`);
+  console.log(`🏢 ${companies.length} companies hiring in Sweden`);
+  console.log(`📍 ${swedishLocations.length} locations across Sweden`);
 });
