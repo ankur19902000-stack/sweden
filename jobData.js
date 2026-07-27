@@ -1,35 +1,38 @@
 // Job data generator - deterministically generates 100,000 jobs for Sweden
 const TOTAL_JOBS = 100000;
 
+// DOMAIN for absolute URLs in schema
+const DOMAIN = 'https://rightwingsweden.up.railway.app';
+
 const jobTitles = [
-  "Mjukvaruingenjör", "Frontend-utvecklare", "Backend-utvecklare", "Full Stack-utvecklare",
-  "Dataanalytiker", "Data Scientist", "Maskininlärningsingenjör", "DevOps-ingenjör",
-  "Cloud-arkitekt", "Mobilutvecklare", "Android-utvecklare", "iOS-utvecklare",
-  "Produktchef", "Projektledare", "Scrum Master", "Verksamhetsanalytiker",
-  "UX/UI-designer", "Grafisk designer", "Varumärkesdesigner", "Webbdesigner",
-  "Marknadschef", "Digital marknadsförare", "SEO-specialist", "Content-skrivare",
-  "Copywriter", "Social Media-chef", "Communities-chef", "Growth Hacker",
-  "Försäljningschef", "Kontorschef", "Affärsutvecklingschef", "Säljare",
-  "Finansanalytiker", "Redovisningsekonom", "Finanschef", "Revisor",
-  "HR-chef", "HR-generalist", "Rekryterare", "Talent Acquisition-specialist",
-  "Verksamhetschef", "Supply Chain-chef", "Logistikkoordinator", "Inköpsansvarig",
-  "Customer Success-chef", "Kundsupport", "Teknisk supportingenjör",
-  "Nätverksingenjör", "Cybersäkerhetsanalytiker", "Informationssäkerhetschef",
-  "Databasadministratör", "Systemadministratör", "IT-chef", "CTO",
-  "Juridisk rådgivare", "Compliance-officer", "Riskchef", "Avtalschef",
-  "Vårdadministratör", "Klinisk forskningsassistent", "Apotekare", "Sjuksköterska",
-  "Lärare", "Utbildningskonsult", "Instruktionsdesigner", "Utbildningschef",
-  "Civilingenjör", "Maskiningenjör", "Elkraftingenjör", "Byggnadsingenjör",
-  "Arkitekt", "Stadsplanerare", "Miljökonsult", "Säkerhetsansvarig",
-  "Fastighetsmäklare", "Fastighetsförvaltare", "Facilitetschef", "Byggchef",
-  "Forskningsanalytiker", "Policyanalytiker", "Kommunikationschef", "PR-ansvarig",
-  "Personlig assistent", "Administrativ chef", "Kontorschef", "Receptionist",
-  "Videoredigerare", "Motion Graphic-designer", "Content-strateg", "Varumärkeschef",
-  "Partnerskapschef", "Customer Experience-chef", "Dataingenjör", "BI-utvecklare",
+  "Software Engineer", "Frontend Developer", "Backend Developer", "Full Stack Developer",
+  "Data Analyst", "Data Scientist", "Machine Learning Engineer", "DevOps Engineer",
+  "Cloud Architect", "Mobile Developer", "Android Developer", "iOS Developer",
+  "Product Manager", "Project Manager", "Scrum Master", "Business Analyst",
+  "UI/UX Designer", "Graphic Designer", "Brand Designer", "Web Designer",
+  "Marketing Manager", "Digital Marketing Specialist", "SEO Specialist", "Content Writer",
+  "Copywriter", "Social Media Manager", "Community Manager", "Growth Hacker",
+  "Sales Manager", "Account Manager", "Business Development Manager", "Sales Executive",
+  "Financial Analyst", "Accountant", "Finance Manager", "Auditor",
+  "HR Manager", "HR Generalist", "Recruiter", "Talent Acquisition Specialist",
+  "Operations Manager", "Supply Chain Manager", "Logistics Coordinator", "Procurement Officer",
+  "Customer Success Manager", "Customer Support Specialist", "Technical Support Engineer",
+  "Network Engineer", "Cybersecurity Analyst", "Information Security Officer",
+  "Database Administrator", "Systems Administrator", "IT Manager", "CTO",
+  "Legal Counsel", "Compliance Officer", "Risk Manager", "Contract Manager",
+  "Healthcare Administrator", "Clinical Research Associate", "Pharmacist", "Nurse",
+  "Teacher", "Education Consultant", "Instructional Designer", "Training Manager",
+  "Civil Engineer", "Mechanical Engineer", "Electrical Engineer", "Structural Engineer",
+  "Architect", "Urban Planner", "Environmental Consultant", "Safety Officer",
+  "Real Estate Agent", "Property Manager", "Facilities Manager", "Construction Manager",
+  "Research Analyst", "Policy Analyst", "Communications Manager", "Public Relations Officer",
+  "Executive Assistant", "Administrative Officer", "Office Manager", "Receptionist",
+  "Video Editor", "Motion Graphics Designer", "Content Strategist", "Brand Manager",
+  "Partnerships Manager", "Customer Experience Manager", "Data Engineer", "BI Developer",
   "Scrum Master", "Agile Coach", "Release Manager", "Site Reliability Engineer",
-  "Penetrationstestare", "Cloud-ingenjör", "Plattformsingenjör", "API-utvecklare",
-  "Hotellchef", "Restaurangchef", "Kock", "Sommelier", "Eventchef",
-  "Flygingenjör", "Pilot", "Flygvärdinna", "Flygplatschef"
+  "Penetration Tester", "Cloud Engineer", "Platform Engineer", "API Developer",
+  "Hotel Manager", "Restaurant Manager", "Chef", "Sommelier", "Event Manager",
+  "Aviation Engineer", "Pilot", "Flight Attendant", "Airport Manager"
 ];
 
 // Swedish companies (including global with Swedish presence)
@@ -51,6 +54,8 @@ const companies = [
   "Axel Johnson", "ICA Gruppen", "Axfood", "Coop Sverige",
   "IKEA", "Elgiganten", "Clas Ohlson", "Biltema", "Jula",
   "H&M", "Lindex", "Åhléns", "Gina Tricot", "NA-KD.com",
+  "Swedish Match", "Absolut Vodka", "Electrolux", "Securitas",
+  "Stockholm Exergi", "Systembolaget", "PostNord", "SJ",
   
   // Global with Swedish presence
   "Google", "Amazon", "Microsoft", "Apple", "Meta", "Tesla", "Netflix",
@@ -64,123 +69,122 @@ const companies = [
   "Pfizer", "Novartis", "Roche", "GSK", "Johnson & Johnson",
   "Samsung", "LG", "Sony", "Panasonic",
   "Toyota", "Honda", "Nissan", "BMW", "Mercedes-Benz",
-  "LVMH", "Kering", "Chanel", "Gucci",
-  "Swedish Match", "Absolut Vodka", "Electrolux", "Securitas"
+  "LVMH", "Kering", "Chanel", "Gucci"
 ];
 
 const swedishLocations = [
   // Stockholm region
-  "Stockholm, Stockholms län", "Solna, Stockholms län", "Sundbyberg, Stockholms län",
-  "Huddinge, Stockholms län", "Södertälje, Stockholms län", "Nacka, Stockholms län",
-  "Täby, Stockholms län", "Danderyd, Stockholms län", "Sollentuna, Stockholms län",
-  "Tyresö, Stockholms län", "Upplands Väsby, Stockholms län", "Järfälla, Stockholms län",
-  "Vallentuna, Stockholms län", "Österåker, Stockholms län", "Vaxholm, Stockholms län",
-  "Norrtälje, Stockholms län", "Nykvarn, Stockholms län",
+  "Stockholm, Stockholm County", "Solna, Stockholm County", "Sundbyberg, Stockholm County",
+  "Huddinge, Stockholm County", "Södertälje, Stockholm County", "Nacka, Stockholm County",
+  "Täby, Stockholm County", "Danderyd, Stockholm County", "Sollentuna, Stockholm County",
+  "Tyresö, Stockholm County", "Upplands Väsby, Stockholm County", "Järfälla, Stockholm County",
+  "Vallentuna, Stockholm County", "Österåker, Stockholm County", "Vaxholm, Stockholm County",
+  "Norrtälje, Stockholm County", "Nykvarn, Stockholm County",
   
   // Gothenburg region
-  "Göteborg, Västra Götalands län", "Mölndal, Västra Götalands län",
-  "Partille, Västra Götalands län", "Kungsbacka, Västra Götalands län",
-  "Kungälv, Västra Götalands län", "Uddevalla, Västra Götalands län",
-  "Trollhättan, Västra Götalands län", "Borås, Västra Götalands län",
-  "Skövde, Västra Götalands län", "Lidköping, Västra Götalands län",
+  "Gothenburg, Västra Götaland County", "Mölndal, Västra Götaland County",
+  "Partille, Västra Götaland County", "Kungsbacka, Västra Götaland County",
+  "Kungälv, Västra Götaland County", "Uddevalla, Västra Götaland County",
+  "Trollhättan, Västra Götaland County", "Borås, Västra Götaland County",
+  "Skövde, Västra Götaland County", "Lidköping, Västra Götaland County",
   
   // Skåne region
-  "Malmö, Skåne län", "Helsingborg, Skåne län", "Lund, Skåne län",
-  "Landskrona, Skåne län", "Trelleborg, Skåne län", "Kristianstad, Skåne län",
-  "Ängelholm, Skåne län", "Ystad, Skåne län", "Hässleholm, Skåne län",
-  "Eslöv, Skåne län", "Staffanstorp, Skåne län",
+  "Malmö, Skåne County", "Helsingborg, Skåne County", "Lund, Skåne County",
+  "Landskrona, Skåne County", "Trelleborg, Skåne County", "Kristianstad, Skåne County",
+  "Ängelholm, Skåne County", "Ystad, Skåne County", "Hässleholm, Skåne County",
+  "Eslöv, Skåne County", "Staffanstorp, Skåne County",
   
   // Östergötland
-  "Linköping, Östergötlands län", "Norrköping, Östergötlands län",
-  "Motala, Östergötlands län", "Finspång, Östergötlands län",
+  "Linköping, Östergötland County", "Norrköping, Östergötland County",
+  "Motala, Östergötland County", "Finspång, Östergötland County",
   
   // Jönköping
-  "Jönköping, Jönköpings län", "Värnamo, Jönköpings län", "Nässjö, Jönköpings län",
-  "Gislaved, Jönköpings län", "Vetlanda, Jönköpings län",
+  "Jönköping, Jönköping County", "Värnamo, Jönköping County", "Nässjö, Jönköping County",
+  "Gislaved, Jönköping County", "Vetlanda, Jönköping County",
   
   // Dalarna
-  "Falun, Dalarnas län", "Borlänge, Dalarnas län", "Ludvika, Dalarnas län",
-  "Mora, Dalarnas län", "Avesta, Dalarnas län",
+  "Falun, Dalarna County", "Borlänge, Dalarna County", "Ludvika, Dalarna County",
+  "Mora, Dalarna County", "Avesta, Dalarna County",
   
   // Gävleborg
-  "Gävle, Gävleborgs län", "Sandviken, Gävleborgs län", "Hudiksvall, Gävleborgs län",
+  "Gävle, Gävleborg County", "Sandviken, Gävleborg County", "Hudiksvall, Gävleborg County",
   
   // Norrbotten
-  "Luleå, Norrbottens län", "Boden, Norrbottens län", "Piteå, Norrbottens län",
-  "Kiruna, Norrbottens län", "Gällivare, Norrbottens län",
+  "Luleå, Norrbotten County", "Boden, Norrbotten County", "Piteå, Norrbotten County",
+  "Kiruna, Norrbotten County", "Gällivare, Norrbotten County",
   
   // Västerbotten
-  "Umeå, Västerbottens län", "Skellefteå, Västerbottens län", "Lycksele, Västerbottens län",
+  "Umeå, Västerbotten County", "Skellefteå, Västerbotten County", "Lycksele, Västerbotten County",
   
   // Västernorrland
-  "Sundsvall, Västernorrlands län", "Härnösand, Västernorrlands län",
-  "Örnsköldsvik, Västernorrlands län",
+  "Sundsvall, Västernorrland County", "Härnösand, Västernorrland County",
+  "Örnsköldsvik, Västernorrland County",
   
   // Örebro
-  "Örebro, Örebro län", "Karlskoga, Örebro län", "Kumla, Örebro län",
+  "Örebro, Örebro County", "Karlskoga, Örebro County", "Kumla, Örebro County",
   
   // Uppsala
-  "Uppsala, Uppsala län", "Enköping, Uppsala län", "Knivsta, Uppsala län",
+  "Uppsala, Uppsala County", "Enköping, Uppsala County", "Knivsta, Uppsala County",
   
   // Västmanland
-  "Västerås, Västmanlands län", "Sala, Västmanlands län", "Köping, Västmanlands län",
+  "Västerås, Västmanland County", "Sala, Västmanland County", "Köping, Västmanland County",
   
   // Södermanland
-  "Nyköping, Södermanlands län", "Eskilstuna, Södermanlands län",
-  "Trosa, Södermanlands län", "Katrineholm, Södermanlands län",
+  "Nyköping, Södermanland County", "Eskilstuna, Södermanland County",
+  "Trosa, Södermanland County", "Katrineholm, Södermanland County",
   
   // Blekinge
-  "Karlskrona, Blekinge län", "Karlshamn, Blekinge län", "Ronneby, Blekinge län",
+  "Karlskrona, Blekinge County", "Karlshamn, Blekinge County", "Ronneby, Blekinge County",
   
   // Gotland
-  "Visby, Gotlands län",
+  "Visby, Gotland County",
   
   // Halland
-  "Halmstad, Hallands län", "Varberg, Hallands län", "Falkenberg, Hallands län",
+  "Halmstad, Halland County", "Varberg, Halland County", "Falkenberg, Halland County",
   
   // Kalmar
-  "Kalmar, Kalmar län", "Västervik, Kalmar län", "Oskarshamn, Kalmar län",
+  "Kalmar, Kalmar County", "Västervik, Kalmar County", "Oskarshamn, Kalmar County",
   
   // Kronoberg
-  "Växjö, Kronobergs län", "Ljungby, Kronobergs län", "Växjö, Kronobergs län",
+  "Växjö, Kronoberg County", "Ljungby, Kronoberg County",
   
   // Jämtland
-  "Östersund, Jämtlands län", "Strömsund, Jämtlands län",
+  "Östersund, Jämtland County", "Strömsund, Jämtland County",
   
   // Remote
-  "Distans — Sverige", "Distans — Stockholm, Sverige"
+  "Remote — Sweden", "Remote — Stockholm, Sweden"
 ];
 
 const salaryRanges = [
-  { display: "25 000 – 30 000 kr/månad", min: 25000, max: 30000 },
-  { display: "30 000 – 35 000 kr/månad", min: 30000, max: 35000 },
-  { display: "35 000 – 42 000 kr/månad", min: 35000, max: 42000 },
-  { display: "42 000 – 50 000 kr/månad", min: 42000, max: 50000 },
-  { display: "50 000 – 60 000 kr/månad", min: 50000, max: 60000 },
-  { display: "60 000 – 75 000 kr/månad", min: 60000, max: 75000 },
-  { display: "75 000 – 90 000 kr/månad", min: 75000, max: 90000 },
-  { display: "90 000 – 110 000 kr/månad", min: 90000, max: 110000 },
-  { display: "110 000+ kr/månad", min: 110000, max: 150000 },
-  { display: "20 000 – 25 000 kr/månad", min: 20000, max: 25000 },
-  { display: "15 000 – 20 000 kr/månad", min: 15000, max: 20000 }
+  { display: "SEK 25,000 – 30,000/month", min: 25000, max: 30000 },
+  { display: "SEK 30,000 – 35,000/month", min: 30000, max: 35000 },
+  { display: "SEK 35,000 – 42,000/month", min: 35000, max: 42000 },
+  { display: "SEK 42,000 – 50,000/month", min: 42000, max: 50000 },
+  { display: "SEK 50,000 – 60,000/month", min: 50000, max: 60000 },
+  { display: "SEK 60,000 – 75,000/month", min: 60000, max: 75000 },
+  { display: "SEK 75,000 – 90,000/month", min: 75000, max: 90000 },
+  { display: "SEK 90,000 – 110,000/month", min: 90000, max: 110000 },
+  { display: "SEK 110,000+/month", min: 110000, max: 150000 },
+  { display: "SEK 20,000 – 25,000/month", min: 20000, max: 25000 },
+  { display: "SEK 15,000 – 20,000/month", min: 15000, max: 20000 }
 ];
 
 const jobTypes = ["FULL_TIME", "CONTRACTOR", "PART_TIME", "INTERN", "TEMPORARY"];
 const jobTypeDisplay = { 
-  "FULL_TIME": "Heltid", 
-  "CONTRACTOR": "Konsult", 
-  "PART_TIME": "Deltid", 
-  "INTERN": "Praktik", 
-  "TEMPORARY": "Tillsvidare" 
+  "FULL_TIME": "Full-time", 
+  "CONTRACTOR": "Contract", 
+  "PART_TIME": "Part-time", 
+  "INTERN": "Internship", 
+  "TEMPORARY": "Temporary" 
 };
 
 const experienceLevels = [
-  { display: "Nyexaminerad", schema: "no requirements" },
-  { display: "1–3 års erfarenhet", schema: "1 year experience" },
-  { display: "3–5 års erfarenhet", schema: "3 years experience" },
-  { display: "5–7 års erfarenhet", schema: "5 years experience" },
-  { display: "7–10 års erfarenhet", schema: "7 years experience" },
-  { display: "10+ års erfarenhet", schema: "10 years experience" },
+  { display: "Entry Level", schema: "no requirements" },
+  { display: "1–3 Years Experience", schema: "1 year experience" },
+  { display: "3–5 Years Experience", schema: "3 years experience" },
+  { display: "5–7 Years Experience", schema: "5 years experience" },
+  { display: "7–10 Years Experience", schema: "7 years experience" },
+  { display: "10+ Years Experience", schema: "10 years experience" },
   { display: "Senior", schema: "5 years experience" },
   { display: "Lead", schema: "7 years experience" },
   { display: "Manager", schema: "5 years experience" },
@@ -189,88 +193,88 @@ const experienceLevels = [
 ];
 
 const industries = [
-  "Teknik", "Fintech", "E-handel", "Bank & Finans", "Olja & Gas",
-  "Fastigheter", "Hälsovård", "Utbildning", "Konsulting", "Flyg",
-  "Bygg", "Logistik & Sjöfart", "Hotell & Restaurang", "Detaljhandel", "Media & Underhållning",
-  "Förnybar Energi", "Fordonsindustri", "Telekommunikation", "Juridik", "Offentlig sektor",
-  "Läkemedel", "Skog & Papper", "Stål & Metall", "Gruvindustri", "Försvar"
+  "Technology", "Fintech", "E-commerce", "Banking & Finance", "Oil & Gas",
+  "Real Estate", "Healthcare", "Education", "Consulting", "Aviation",
+  "Construction", "Logistics & Shipping", "Hospitality", "Retail", "Media & Entertainment",
+  "Renewable Energy", "Automotive", "Telecommunications", "Legal", "Public Sector",
+  "Pharmaceuticals", "Forestry & Paper", "Steel & Metal", "Mining", "Defense"
 ];
 
 const jobDescriptions = [
-  (title, company, isRemote, location) => `Vi söker en erfaren ${title} till teamet på ${company} i Sverige. ${isRemote ? "Detta är en helt distansroll öppen för kvalificerade kandidater i hela Sverige." : `Denna roll är baserad i ${location}.`}
+  (title, company, isRemote, location) => `We are seeking an experienced ${title} to join the team at ${company} in Sweden. ${isRemote ? "This is a fully remote role open to qualified candidates across Sweden." : `This role is based in ${location}.`}
 
-Du kommer att ansvara för att leverera högkvalitativt arbete som driver affärsresultat och bidrar till ${company}:s verksamhet i Sverige och Norden.
+You will be responsible for delivering high-quality work that drives business outcomes and contributes to ${company}'s growing operations in Sweden and the Nordic region.
 
-Arbetsuppgifter:
-• Leda och utföra kärnfunktioner inom ${title.toLowerCase()}
-• Samarbeta med tvärfunktionella team för att nå strategiska mål
-• Analysera data och ge handlingsbara insikter för att förbättra prestanda
-• Mentorskap för juniora teammedlemmar och kunskapsdelning
-• Säkerställa att bästa praxis följs i alla leveranser
+Key Responsibilities:
+• Lead and execute core ${title.toLowerCase()} functions across the organization
+• Collaborate with cross-functional teams to deliver on strategic objectives
+• Analyze data and provide actionable insights to improve performance
+• Mentor junior team members and contribute to knowledge sharing
+• Ensure best practices are followed in all deliverables
 
-Krav:
-• 3–5 års erfarenhet i en liknande ${title.toLowerCase()}-roll
-• Stark kommunikation och problemlösning
-• Erfarenhet av att arbeta i en snabb global teknisk miljö
-• Högskoleexamen i relevant område
-• Goda kunskaper i moderna verktyg och plattformar
+Requirements:
+• 3–5 years of experience in a similar ${title.toLowerCase()} role
+• Strong communication and problem-solving skills
+• Experience working in fast-paced global tech/business environment
+• Bachelor's degree in a relevant field
+• Proficiency with modern tools and platforms
 
-Vi erbjuder:
-• Konkurrenskraftig lön i SEK
-• Förmåner enligt kollektivavtal
-• 30 dagars semester
-• Distansarbetsersättning
-• Årlig prestationsbonus
-• Friskvårdsbidrag
-• Möjlighet till tjänstepension`,
+What We Offer:
+• Competitive salary in SEK
+• Collective agreement benefits
+• 30 days annual leave
+• Remote work allowance
+• Annual performance bonus
+• Wellness allowance (friskvårdsbidrag)
+• Occupational pension (tjänstepension)`,
 
-  (title, company, isRemote, location) => `${company} söker nu en ${title}! Vi är ett ledande företag i Sverige som letar efter erfarna medarbetare för att stärka vår verksamhet i Norden.
+  (title, company, isRemote, location) => `${company} is hiring a ${title}! We are a leading company in Sweden looking for experienced professionals to scale our impact across the Nordics.
 
-${isRemote ? "Denna distansbaserade roll gör det möjligt för dig att arbeta var som helst i Sverige med flexibla arbetstider." : `Du kommer att arbeta från vårt ${location}-kontor med ett dynamiskt team.`}
+${isRemote ? "This remote-first position allows you to work from anywhere in Sweden with flexible hours." : `You will work from our ${location} office with a dynamic, ambitious team.`}
 
-Om rollen:
-Som ${title} hos ${company} kommer du att spela en nyckelroll i att utveckla våra produkter och tjänster. Du arbetar nära ledningen och kollegor för att genomföra vår mission i en av världens snabbast växande ekonomier.
+About the Role:
+As a ${title} at ${company}, you will play a key role in shaping our products and services. You'll work closely with leadership and peers to execute on our mission in one of the world's most innovative economies.
 
-Vad du kommer att göra:
-• Driva viktiga ${title.toLowerCase()}-initiativ från planering till genomförande
-• Bygga och underhålla relationer med viktiga intressenter
-• Rapportera KPI:er och bidra till strategisk planering
-• Håll dig uppdaterad om branschtrender globalt och i Sverige
-• Representera ${company} med professionalism och integritet
+What You'll Do:
+• Drive key ${title.toLowerCase()} initiatives from planning to execution
+• Build and maintain relationships with key stakeholders
+• Report on KPIs and contribute to strategic planning
+• Stay updated on industry trends globally and in Sweden
+• Represent ${company} with professionalism and integrity
 
-Vad du bidrar med:
-• 2–6 års bevisad erfarenhet som ${title.toLowerCase()}
-• Stark analytisk och kommunikativ förmåga
-• Lagspelare med ett utvecklingsorienterat tänkande
-• Relevant examen eller certifiering meriterande
+What You Bring:
+• 2–6 years proven experience as a ${title.toLowerCase()}
+• Strong analytical and communication skills
+• Team player with a growth mindset
+• Relevant degree or certification preferred
 
-Erbjudande:
-• Konkurrenskraftig lön • Förmåner • Hälsovårdsförsäkring • 30 dagars semester • Utbildningsbidrag`,
+Compensation & Benefits:
+• Competitive SEK salary • Benefits package • Health insurance • 30 days annual leave • Education allowance`,
 
-  (title, company, isRemote, location) => `Bli en del av ${company} som ${title} och var med i ett av Sveriges mest spännande företag!
+  (title, company, isRemote, location) => `Join ${company} as a ${title} and be part of one of Sweden's most exciting companies!
 
-${isRemote ? "🌐 Distans | Arbeta var som helst i Sverige" : `📍 ${location}`}
+${isRemote ? "🌐 Remote | Work from anywhere in Sweden" : `📍 ${location}`}
 
-Vi bygger framtidens verksamhet i Norden och behöver exceptionell talang som dig. Detta är en sällsynt möjlighet att arbeta med ett världsklassföretag samtidigt som du njuter av den svenska livsstilen.
+We're building the future of business in the Nordics and need exceptional talent like you. This is a rare opportunity to work with a world-class brand while enjoying the Swedish lifestyle.
 
-Möjligheten:
-Du kommer att ta rollen som ${title} i en kritisk tillväxtfas. Ditt arbete kommer direkt att påverka miljontals kunder i regionen.
+The Opportunity:
+You'll be taking on the ${title} role at a critical growth stage. Your work will directly impact millions of customers across the region.
 
-Dagliga arbetsuppgifter:
-• Genomföra och förbättra arbetsflöden inom ${title.toLowerCase()}
-• Samarbeta med produkt-, teknik- och affärsteam
-• Följa upp mätvärden och optimera prestanda
-• Bidra till en kultur av excellens och innovation
-• Stödja ledningen med rapportering och strategi
+Day-to-Day Responsibilities:
+• Execute and improve key workflows within the ${title.toLowerCase()} function
+• Collaborate with product, engineering, and business teams
+• Track metrics and optimize for performance
+• Contribute to a culture of excellence and innovation
+• Support senior leadership with reporting and strategy
 
-Din profil:
-• 3+ års erfarenhet inom ${title.toLowerCase()} eller relaterat område
-• Bekväm i en snabb global affärsmiljö
-• Goda sociala färdigheter och professionell arbetsmoral
-• Examen inom relevant disciplin (Master är meriterande)
+Your Profile:
+• 3+ years in ${title.toLowerCase()} or related field
+• Comfortable in a fast-moving global business ecosystem
+• Strong interpersonal skills and professional work ethic
+• Degree in relevant discipline (Master's is a plus)
 
-Förmåner hos ${company}:
-Konkurrenskraftig lön | Friskvårdsbidrag | Pension | 30 dagars semester | Prestationsbonus | Utbildningsbudget`
+Perks at ${company}:
+Competitive salary | Wellness allowance | Pension | 30 days leave | Performance bonus | Learning budget`
 ];
 
 function seededRandom(seed) {
@@ -296,7 +300,7 @@ function getJobData(id) {
 
   const title    = jobTitles[titleIndex];
   const company  = companies[companyIndex];
-  const location = isRemote ? "Distans — Sverige" : swedishLocations[locationIndex];
+  const location = isRemote ? "Remote — Sweden" : swedishLocations[locationIndex];
   const salary   = salaryRanges[salaryIndex];
   const jobType  = jobTypes[jobTypeIndex];
   const exp      = experienceLevels[expIndex];
@@ -377,7 +381,7 @@ function getJobSchema(job) {
         : parseInt(job.experienceSchema) * 12
     },
     "industry": job.industry,
-    "url": `/jobb/${job.id}`,
+    "url": `${DOMAIN}/jobs/${job.id}`,
     "directApply": true
   };
 
