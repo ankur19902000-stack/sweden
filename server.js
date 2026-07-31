@@ -16,14 +16,14 @@ const DOMAIN = 'https://rightwingsweden.up.railway.app';
 const AD_SCRIPT = `
 <script>
   atOptions = {
-    'key' : '72b6f3ac3fc2f43722e5f2196ef85add',
+    'key' : 'fecbca5771a66db9100114cf9733383f',
     'format' : 'iframe',
     'height' : 90,
     'width' : 728,
     'params' : {}
   };
 </script>
-<script src="https://www.highperformanceformat.com/72b6f3ac3fc2f43722e5f2196ef85add/invoke.js"></script>
+<script src="https://www.highperformanceformat.com/fecbca5771a66db9100114cf9733383f/invoke.js"></script>
 `;
 
 const AD_TOP = `
@@ -154,14 +154,14 @@ ${AD_TOP}
     <div>
 <script>
   atOptions = {
-    'key' : 'd1b072857c7132ec474a48b3413701e2',
+    'key' : '1391d76b73477ae70080c4bd682b5e12',
     'format' : 'iframe',
     'height' : 60,
     'width' : 468,
     'params' : {}
   };
 </script>
-<script src="https://www.highperformanceformat.com/d1b072857c7132ec474a48b3413701e2/invoke.js"></script>
+<script src="https://www.highperformanceformat.com/1391d76b73477ae70080c4bd682b5e12/invoke.js"></script>
 </div>
 </div>
 ${bodyContent}
